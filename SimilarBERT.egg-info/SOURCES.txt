@@ -1,0 +1,9 @@
+LICENSE
+README.md
+setup.py
+SimilarBERT.egg-info/PKG-INFO
+SimilarBERT.egg-info/SOURCES.txt
+SimilarBERT.egg-info/dependency_links.txt
+SimilarBERT.egg-info/top_level.txt
+similarbert/__init__.py
+similarbert/similarbert.py

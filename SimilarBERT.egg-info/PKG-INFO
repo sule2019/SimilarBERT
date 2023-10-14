@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: SimilarBERT
+Version: 0.1.0
+Summary: SimilarBERT uses fast clustering with BERT to perform topic modeling
+Home-page: https://github.com/sule2019/SimilarBERT
+Author: Mohammed Sule
+Author-email: mohammed.sule922015@gmail.com
+License: MIT License
+Project-URL: Documentation, https://github.com/sule2019/SimilarBERT
+Project-URL: Source Code, https://github.com/sule2019/SimilarBERT
+Project-URL: Issue Tracker, https://github.com/sule2019/SimilarBERT/issues
+Keywords: nlp bert topic modeling embeddings
+Classifier: Programming Language :: Python
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Operating System :: MacOS
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+Documentation will update soon

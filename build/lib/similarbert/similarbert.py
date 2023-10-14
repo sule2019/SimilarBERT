@@ -16,61 +16,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 class SimilarBERT:
-
-    """
-    SimilarBERT is a Python package for topic modeling using BERT-based embeddings and clustering techniques.
-
-    It offers the ability to:
-    - Fit BERT embeddings to a list of documents.
-    - Perform community detection to identify topic clusters.
-    - Generate custom topic clusters.
-    - Visualize topic clusters using word clouds.
-
-    Args:
-        model_name (str): The name of the pre-trained BERT model to use.
-
-    Methods:
-        - fit(docs)
-        - transform(embeddings, docs, custom_topics, threshold, min_community_size, batch_size)
-        - fit_transform(docs, custom_topics)
-        - community_detection(embeddings, document_list, threshold, min_community_size, batch_size)
-        - custom_topic_clusters_df(docs, custom_topics, threshold)
-        - preprocess(sentences, remove_symbols, remove_stopwords)
-        - find_ngrams(sentences, n, method, top_n)
-        - get_topic_list(topics)
-        - top_n_topics(topics, top_n)
-        - bottom_n_topics(topics, bottom_n)
-        - select_topics(topics, topics_to_return)
-        - single_topic(topics, topic_number)
-        - list_of_docs(topics)
-        - vis_corpus_wordcloud(topic_list, width, height, background_color, colormap)
-        - vis_wordcloud_top_n_topics(topic_list, top_n, width, height, background_color, colormap, title_font_size)
-    """
-
     def __init__(self, model_name='all-MiniLM-L6-v2'):
-
-        """
-        Initialize the SimilarBERT instance with a BERT model.
-
-        Args:
-            model_name (str): The name of the pre-trained BERT model to use.
-        """
         
         self.model = SentenceTransformer(model_name)
         
             
     def fit(self, docs):
-
-        """
-        Fit BERT embeddings to a list of documents.
-
-        Args:
-            docs (list): List of documents for embedding.
-
-        Returns:
-            embeddings: BERT embeddings of documents.
-            docs: Processed list of documents.
-        """
         
         embeddings = self.model.encode(docs)
         return embeddings, docs
@@ -84,35 +35,10 @@ class SimilarBERT:
             topics = self.custom_topic_clusters_df(docs, custom_topics, threshold)
         return topics
         
-    """
-        Transform embeddings into topic clusters using community detection or custom topics.
-
-        Args:
-            embeddings: BERT embeddings of documents.
-            docs: Processed list of documents.
-            custom_topics: Custom topic clusters.
-            threshold: Cosine similarity threshold.
-            min_community_size: Minimum community size.
-            batch_size: Batch size for processing.
-
-        Returns:
-            topics: Topic clusters.
-        """ 
+            
 
     def fit_transform(self, docs, custom_topics=None):
-        """
-        Fit BERT embeddings to documents and transform them into topic clusters.
-
-        Args:
-            docs: List of documents for embedding.
-            custom_topics: Custom topic clusters (default: None).
-            threshold: Cosine similarity threshold (default: 0.75).
-            min_community_size: Minimum community size (default: 10).
-            batch_size: Batch size for processing (default: 128).
-
-        Returns:
-            topics: Topic clusters.
-        """
+        
         embeddings, docs = self.fit(docs)
         if custom_topics is None:
             topics = self.community_detection(embeddings, docs, threshold=0.75, min_community_size=10, batch_size=128)
@@ -123,20 +49,6 @@ class SimilarBERT:
             
     def community_detection(self, embeddings, document_list, threshold, min_community_size, batch_size):
         
-        """
-        Perform community detection to identify topic clusters.
-
-        Args:
-            embeddings: BERT embeddings of documents.
-            document_list: List of documents.
-            threshold: Cosine similarity threshold.
-            min_community_size: Minimum community size.
-            batch_size: Batch size for processing.
-
-        Returns:
-            community_df: DataFrame with community data.
-        """
-
         if not isinstance(embeddings, torch.Tensor):
             embeddings = torch.tensor(embeddings)
 
@@ -212,18 +124,6 @@ class SimilarBERT:
 
     def custom_topic_clusters_df(self, docs, custom_topics, threshold):
         
-        """
-        Generate custom topic clusters.
-
-        Args:
-            docs: List of documents.
-            custom_topics: Custom topic clusters.
-            threshold: Cosine similarity threshold.
-
-        Returns:
-            custom_topic_df: DataFrame with custom topic data.
-        """
-
         docs_embeddings = self.fit(docs)
         topics_embeddings = self.fit(custom_topics)
         similarity_matrix = cosine_similarity(topics_embeddings, docs_embeddings)
@@ -264,18 +164,6 @@ class SimilarBERT:
 
     def preprocess(self, sentences, remove_symbols=True, remove_stopwords=True):
         
-        """
-        Preprocess a list of sentences by removing symbols and stopwords.
-
-        Args:
-            sentences (list): A list of input sentences to preprocess.
-            remove_symbols (bool): Whether to remove symbols and special characters.
-            remove_stopwords (bool): Whether to remove common stopwords from the sentences.
-
-        Returns:
-            processed_sentences (list): A list of preprocessed sentences.
-        """
-    
         pattern = re.compile(r'[\W_]+')
         processed_sentences = []
 
@@ -296,19 +184,6 @@ class SimilarBERT:
       
 
     def find_ngrams(self, sentences, n=2, method='frequency', top_n=5):
-
-        """
-        Find n-grams in the given sentences.
-
-        Args:
-            sentences (list): List of sentences.
-            n (int): N-gram size (default: 2).
-            method (str): Method to find n-grams ('frequency' or 'tfidf', default: 'frequency').
-            top_n (int): Number of top n-grams to return (default: 5).
-
-        Returns:
-            ngrams: List of top n-grams with their frequencies or TF-IDF scores.
-        """
         
         if method == 'frequency':
             cleaned_sentences = self.preprocess(sentences)
@@ -341,16 +216,6 @@ class SimilarBERT:
             
             
     def get_topic_list(self, topics=None):
-
-        """
-        Get a list of topics without 'Embeddings' and 'Unique_Communities' columns.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-
-        Returns:
-            topic_list: DataFrame with selected columns.
-        """
         
         topic_list = topics.copy() 
         columns_to_drop = ['Unique_Communities', 'Embeddings']
@@ -361,14 +226,6 @@ class SimilarBERT:
 
     def top_n_topics(self, topics=None, top_n=5):
         
-        """
-        Print the top N topics.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            top_n (int): Number of top topics to print (default: 5).
-        """
-
         topics = topics.nlargest(top_n, 'Number of Documents')
         for _, row in topics.iterrows():
             print(f"Topic {row['Topic No.']}:")
@@ -388,14 +245,6 @@ class SimilarBERT:
 
     def bottom_n_topics(self, topics=None, bottom_n=5):
 
-        """
-        Print the bottom N topics.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            bottom_n (int): Number of bottom topics to print (default: 5).
-        """
-
         bottom_topics = topics.nsmallest(bottom_n, 'Number of Documents')
         for _, row in bottom_topics.iterrows():
             print(f"Topic {row['Topic No.']}:")
@@ -413,14 +262,6 @@ class SimilarBERT:
         
            
     def select_topics(self, topics=None, topics_to_return=[1, 2, 3, 4, 5]):
-
-        """
-        Select and print specific topics by their numbers.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            topics_to_return (list): List of topic numbers to select (default: [1, 2, 3, 4, 5]).
-        """
 
         selected_topics = topics[topics["Topic No."].isin(topics_to_return)]
         for _, row in selected_topics.iterrows():
@@ -440,14 +281,6 @@ class SimilarBERT:
            
     def single_topic(self, topics=None, topic_number=1):
         
-        """
-        Print the details of a single topic.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            topic_number (int): Number of the topic to print (default: 1).
-        """
-
         selected_topic = topics[topics["Topic No."] == topic_number]
         if not selected_topic.empty:
             for _, row in selected_topic.iterrows():
@@ -466,16 +299,6 @@ class SimilarBERT:
             
     def list_of_docs(self, topics=None):
 
-        """
-        Get a DataFrame with documents and their associated topics.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-
-        Returns:
-            list_of_docs: DataFrame with 'Topic' and 'Document' columns.
-        """
-
         document_topic_data = []
         for i, topic in topics.iterrows():
             topic_no = topic['Topic No.']
@@ -489,18 +312,6 @@ class SimilarBERT:
     #VISUALIZATION
 
     def vis_corpus_wordcloud(self, topic_list=None, width=800, height=400, background_color='white', colormap='viridis'):
-        
-        """
-        Visualize a word cloud for the entire corpus of documents.
-
-        Args:
-            topic_list (DataFrame): Topic clusters DataFrame.
-            width (int): Word cloud width (default: 800).
-            height (int): Word cloud height (default: 400).
-            background_color (str): Background color (default: 'white').
-            colormap (str): Colormap for word cloud (default: 'viridis').
-        """
-
         if topic_list is not None:
             corpus = ""
             for _, row in topic_list.iterrows():
@@ -516,19 +327,6 @@ class SimilarBERT:
         
             
     def vis_wordcloud_top_n_topics(self, topic_list=None, top_n=5, width=1200, height=800, background_color='white', colormap='viridis', title_font_size=20):
-
-        """
-        Visualize word clouds for the top N topics.
-
-        Args:
-            topic_list (DataFrame): Topic clusters DataFrame.
-            top_n (int): Number of top topics to visualize (default: 5).
-            width (int): Word cloud width (default: 1200).
-            height (int): Word cloud height (default: 800).
-            background_color (str): Background color (default: 'white').
-            colormap (str): Colormap for word cloud (default: 'viridis').
-            title_font_size (int): Font size for topic titles (default: 20).
-        """
 
         if topic_list is not None:
             num_rows = (top_n + 2) // 3
@@ -559,19 +357,6 @@ class SimilarBERT:
     
     def vis_wordcloud_select_topics(self, topic_list=None, topics_to_generate=None, width=1200, height=800, background_color='white', colormap='viridis', title_font_size=20):
         
-        """
-        Visualize word clouds for selected topics.
-
-        Args:
-            topic_list (DataFrame): Topic clusters DataFrame.
-            topics_to_generate (list): List of topic numbers to visualize.
-            width (int): Word cloud width (default: 1200).
-            height (int): Word cloud height (default: 800).
-            background_color (str): Background color (default: 'white').
-            colormap (str): Colormap for word cloud (default: 'viridis').
-            title_font_size (int): Font size for topic titles (default: 20).
-        """
-
         if topic_list is not None and topics_to_generate is not None:
             num_topics = len(topics_to_generate)
             num_rows = (num_topics + 2) // 3  
@@ -608,18 +393,6 @@ class SimilarBERT:
     
     def vis_topics_barchart(self, topic_list=None, topic_numbers=[1], n=2, method='frequency', top_n=5, color=None):
         
-        """
-        Visualize word frequency bar charts for selected topics.
-
-        Args:
-            topic_list (DataFrame): Topic clusters DataFrame.
-            topic_numbers (list): List of topic numbers to visualize (default: [1]).
-            n (int): N-gram size (default: 2).
-            method (str): Method to find n-grams ('frequency' or 'tfidf', default: 'frequency').
-            top_n (int): Number of top n-grams to visualize (default: 5).
-            color (str): Color for the bar charts (default: None).
-        """
-
         if topic_list is not None:
             num_topics = len(topic_numbers)
             num_cols = 2  
@@ -662,16 +435,6 @@ class SimilarBERT:
 
     def cal_similarity_score(self, embeddings):
         
-        """
-        Calculate the average pairwise similarity score for a set of embeddings.
-
-        Args:
-            embeddings (Tensor): Tensor containing embeddings.
-
-        Returns:
-            avg_coherence: Average pairwise similarity score.
-        """
-
         similarity_matrix = cosine_similarity(embeddings)
 
         num_sentences = len(embeddings)
@@ -692,19 +455,6 @@ class SimilarBERT:
             
     def topic_similarity(self, topics=None, top_n=None, sort=True, sort_by="Topic Similarity"):
         
-        """
-        Calculate and return the top N topics based on similarity scores.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            top_n (int): Number of top topics to return.
-            sort (bool): Whether to sort topics by similarity score.
-            sort_by (str): Name of the column to sort by.
-
-        Returns:
-            top_n_communities: DataFrame containing the top N topics.
-        """
-
         if topics is not None:
             topic_data = []
 
@@ -734,17 +484,6 @@ class SimilarBERT:
     
     def vis_topic_similarity_chart(self, topics=None, chart_type='bar', top_n=None, sort_by=None, color='g'):
         
-        """
-        Visualize topic similarity using bar, line, or scatter chart.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            chart_type (str): Type of chart ('bar', 'line', or 'scatter').
-            top_n (int): Number of top topics to visualize.
-            sort_by (str): Name of the column to sort by.
-            color (str): Color for the chart.
-        """
-
         if topics is not None:
             if sort_by:
                 topic_df = self.topic_similarity(topics=topics, sort_by=sort_by, top_n=top_n)
@@ -783,14 +522,6 @@ class SimilarBERT:
     
     def vis_topic_similarity_heatmap(self, topics=None, topic_no=None):
         
-        """
-        Visualize the heatmap of topic similarity.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            topic_no (int): Topic number to visualize the heatmap.
-        """
-
         if topics is not None and topic_no is not None:
             embeddings = topics['Embeddings'].loc[topic_no]
 
@@ -810,16 +541,6 @@ class SimilarBERT:
             
     def cal_dissimilarity_score(self, embeddings):
         
-        """
-        Calculate the average pairwise dissimilarity score for a set of embeddings.
-
-        Args:
-            embeddings (Tensor): Tensor containing embeddings.
-
-        Returns:
-            avg_dissimilarity: Average pairwise dissimilarity score.
-        """
-
         similarity_matrix = 1 - cosine_similarity(embeddings)
 
         num_communities = len(embeddings)
@@ -840,19 +561,6 @@ class SimilarBERT:
 
     def topic_dissimilarity(self, topics=None, top_n=None, sort=True, sort_by="Topic Dissimilarity"):
         
-        """
-        Calculate and return the top N topics based on dissimilarity scores.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            top_n (int): Number of top topics to return.
-            sort (bool): Whether to sort topics by dissimilarity score.
-            sort_by (str): Name of the column to sort by.
-
-        Returns:
-            top_n_communities: DataFrame containing the top N topics.
-        """
-
         topic_data = []
 
         for i, row in topics.iterrows():
@@ -879,17 +587,6 @@ class SimilarBERT:
         
     def vis_topic_dissimilarity_chart(self, topics=None, chart_type='bar', top_n=None, sort_by=None, color='g'):
         
-        """
-        Visualize topic dissimilarity using bar, line, or scatter chart.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            chart_type (str): Type of chart ('bar', 'line', or 'scatter').
-            top_n (int): Number of top topics to visualize.
-            sort_by (str): Name of the column to sort by.
-            color (str): Color for the chart.
-        """
-
         if sort_by:
             topic_df = self.topic_dissimilarity(topics=topics, sort_by=sort_by, top_n=top_n)
         else:
@@ -925,14 +622,6 @@ class SimilarBERT:
     
     def topic_dissimilarity_heatmap(self, topics=None, topic_no=None):
         
-        """
-        Visualize the heatmap of topic dissimilarity.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            topic_no (int): Topic number to visualize the heatmap.
-        """
-
         if topics is not None and topic_no is not None:
             embeddings = topics['Embeddings'].loc[topic_no]
 
@@ -948,18 +637,6 @@ class SimilarBERT:
             
     def topic_similarity_and_dissimilarity_chart(self, topics=None, chart_type='bar', top_n=None, sort_by=None, color_sim='g', color_dissim='r'):
         
-        """
-        Visualize both topic similarity and dissimilarity using bar, line, or scatter chart.
-
-        Args:
-            topics (DataFrame): Topic clusters DataFrame.
-            chart_type (str): Type of chart ('bar', 'line', or 'scatter').
-            top_n (int): Number of top topics to visualize.
-            sort_by (str): Name of the column to sort by.
-            color_sim (str): Color for similarity.
-            color_dissim (str): Color for dissimilarity.
-        """
-
         if sort_by:
             topic_sim_df = self.topic_similarity(topics=topics, sort_by=sort_by, top_n=top_n)
             topic_dissim_df = self.topic_dissimilarity(topics=topics, sort_by=sort_by, top_n=top_n)
